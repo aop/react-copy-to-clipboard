@@ -21,7 +21,8 @@
     "validate": "npm run lint -s && npm run build -s && npm run test:cov -s",
     "precommit": "npm run lint -s",
     "prepush": "npm run validate -s",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "install" : "npm run build"
   },
   "engines": {
     "node": ">=0.10"
