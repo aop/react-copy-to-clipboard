@@ -28,16 +28,16 @@ const CopyToClipboard = React.createClass({
     const {text, getText, onCopy, children, ...props} = this.props;
     const elem = React.Children.only(children);
 
-    if (text !== null && getText !== null) {
+    if (text && getText) {
       console.error('Either text or getText must be given, not both');
-      return '';
+      return false;
     }
-    if (text === null && getText === null) {
+    if (!text && !getText) {
       console.error('Either text or getText must be given');
-      return '';
+      return false;
     }
 
-    if (text !== null) {
+    if (text) {
       retElem = React.cloneElement(elem, {
         ...props,
         onClick: onClick(text, onCopy)

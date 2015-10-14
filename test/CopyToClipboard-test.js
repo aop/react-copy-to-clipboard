@@ -4,7 +4,7 @@ import TestUtils from 'react/lib/ReactTestUtils';
 
 describe('CopyToClipboard', () => {
   const CopyToClipboardInjector = require('inject!../src/CopyToClipboard');
-  let copy, CopyToClipboard, onCopy;
+  let copy, CopyToClipboard, onCopy, getText;
 
 
   beforeEach(() => {
@@ -21,9 +21,13 @@ describe('CopyToClipboard', () => {
   });
 
 
-  const create = (children, text = 'test') =>
+  const create = (children, text = 'test', getTextFunc) =>
     TestUtils.renderIntoDocument(<CopyToClipboard
-      text={text} onCopy={onCopy} children={children} />);
+      text={text} getText={getTextFunc} onCopy={onCopy} children={children} />);
+
+  const createWithGetText = (children, getTextFunc) =>
+    TestUtils.renderIntoDocument(<CopyToClipboard
+      getText={getTextFunc} onCopy={onCopy} children={children} />);
 
 
   it('should be ok', () => {
@@ -101,5 +105,15 @@ describe('CopyToClipboard', () => {
     expect(buttonElement.className).toEqual('testClass');
     expect(buttonElement.style.display).toEqual('none');
     expect(buttonElement.nodeName.toLowerCase()).toEqual('button');
+  });
+
+  it('should call getText property', () => {
+    getText = jasmine.createSpy('getText');
+
+    const span = React.findDOMNode(createWithGetText(<span>test</span>, getText));
+
+    TestUtils.Simulate.click(span);
+
+    expect(getText).toHaveBeenCalled();
   });
 });
